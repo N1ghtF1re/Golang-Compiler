@@ -28,7 +28,8 @@ enum Token {
 	DIV,
 	DOT,
 	COMMA
-}
+};
+
 %}
 /*
 DIGITS
