@@ -354,8 +354,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 33
-#define YY_END_OF_BUFFER 34
+#define YY_NUM_RULES 34
+#define YY_END_OF_BUFFER 35
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -365,7 +365,7 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[176] =
     {   0,
-        0,    0,   34,   33,   30,   32,   31,   23,   33,   33,
+        0,    0,   35,   33,   30,   32,   31,   23,   33,   33,
        12,   13,   26,   24,   29,   25,   28,   27,   17,   17,
        33,   22,   18,   33,   18,   18,   18,   18,   18,   18,
        18,   18,   18,   18,   15,   14,   19,    0,    4,    0,
@@ -684,8 +684,7 @@ char *yytext;
 #line 4 "lexer.flex"
 #include "lexer.h"
 
-TokensList tokensList;
-#line 689 "lex.yy.c"
+#line 688 "lex.yy.c"
 /*
 DIGITS
 */
@@ -711,7 +710,7 @@ STRING LITERALS
 TYPES
 */
 /*TypeLit		{ArrayType}|{StructType}|{PointerType}|{FunctionType}|{InterfaceType}|{SliceType}|{MapType}|{ChannelType}*/
-#line 715 "lex.yy.c"
+#line 714 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -928,9 +927,9 @@ YY_DECL
 		}
 
 	{
-#line 74 "lexer.flex"
+#line 73 "lexer.flex"
 
-#line 934 "lex.yy.c"
+#line 933 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -990,17 +989,17 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 75 "lexer.flex"
+#line 74 "lexer.flex"
 
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 76 "lexer.flex"
+#line 75 "lexer.flex"
 
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 78 "lexer.flex"
+#line 77 "lexer.flex"
 {	
 						printf(" PACKAGE ");
 						tokenList_add_withoutvalue(PACKAGE);
@@ -1009,7 +1008,7 @@ YY_RULE_SETUP
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 83 "lexer.flex"
+#line 82 "lexer.flex"
 {	
 						printf("(%s STRING)", yytext);
 						tokenList_add_string_lit(yytext);
@@ -1017,7 +1016,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 87 "lexer.flex"
+#line 86 "lexer.flex"
 {	
 						printf("(%s CHAR)", yytext);
 						tokenList_add_char_lit(yytext);
@@ -1025,7 +1024,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 91 "lexer.flex"
+#line 90 "lexer.flex"
 {	
 						printf("(%s PRIMTYPE)", yytext);
 						tokenList_add_prim_type(yytext);
@@ -1033,7 +1032,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 96 "lexer.flex"
+#line 95 "lexer.flex"
 {
 						printf(" FUNC ");
 						tokenList_add_withoutvalue(FUNC);
@@ -1041,7 +1040,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 100 "lexer.flex"
+#line 99 "lexer.flex"
 {
 						printf(" VAR ");
 						tokenList_add_withoutvalue(VAR);
@@ -1049,7 +1048,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 104 "lexer.flex"
+#line 103 "lexer.flex"
 {
 						printf(" FOR ");
 						tokenList_add_withoutvalue(FOR);
@@ -1057,7 +1056,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 108 "lexer.flex"
+#line 107 "lexer.flex"
 {
 						printf(" IF ");
 						tokenList_add_withoutvalue(IF);
@@ -1065,7 +1064,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 112 "lexer.flex"
+#line 111 "lexer.flex"
 {
 						printf(" ELSE ");
 						tokenList_add_withoutvalue(ELSE);
@@ -1073,7 +1072,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 117 "lexer.flex"
+#line 116 "lexer.flex"
 {
 						printf(" OPEN ");
 						tokenList_add_withoutvalue(OPEN);
@@ -1081,7 +1080,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 121 "lexer.flex"
+#line 120 "lexer.flex"
 {
 						printf(" CLOSE ");
 						tokenList_add_withoutvalue(CLOSE);
@@ -1089,7 +1088,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 126 "lexer.flex"
+#line 125 "lexer.flex"
 {
 						printf(" BLOPEN ");
 						tokenList_add_withoutvalue(BLOPEN);
@@ -1097,7 +1096,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 130 "lexer.flex"
+#line 129 "lexer.flex"
 {
 						printf(" BLCLOSE ");
 						tokenList_add_withoutvalue(BLCLOSE);
@@ -1105,7 +1104,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 135 "lexer.flex"
+#line 134 "lexer.flex"
 {	
 						printf("(%s FLOAT)", yytext);
 						tokenList_add_float_lit(yytext);
@@ -1113,7 +1112,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 139 "lexer.flex"
+#line 138 "lexer.flex"
 {	
 						printf("(%s INT)", yytext);
 						tokenList_add_int_lit(yytext);
@@ -1121,7 +1120,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 143 "lexer.flex"
+#line 142 "lexer.flex"
 {
 						printf("(%s ID)", yytext);
 						tokenList_add_id(yytext);
@@ -1129,7 +1128,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 148 "lexer.flex"
+#line 147 "lexer.flex"
 {
 						printf(" NEQUAL ");
 						tokenList_add_withoutvalue(NEQUAL);
@@ -1137,7 +1136,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 152 "lexer.flex"
+#line 151 "lexer.flex"
 {
 						printf(" EQUAL ");
 						tokenList_add_withoutvalue(EQUAL);
@@ -1145,7 +1144,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 156 "lexer.flex"
+#line 155 "lexer.flex"
 {
 						printf(" INIT ");
 						tokenList_add_withoutvalue(INIT);
@@ -1153,7 +1152,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 160 "lexer.flex"
+#line 159 "lexer.flex"
 {
 						printf(" ASSIGN ");
 						tokenList_add_withoutvalue(ASSIGN);
@@ -1161,7 +1160,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 164 "lexer.flex"
+#line 163 "lexer.flex"
 {
 						printf(" NOT ");
 						tokenList_add_withoutvalue(NOT);
@@ -1169,7 +1168,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 168 "lexer.flex"
+#line 167 "lexer.flex"
 {
 						printf(" PLUS ");
 						tokenList_add_withoutvalue(PLUS);
@@ -1177,7 +1176,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 172 "lexer.flex"
+#line 171 "lexer.flex"
 {
 						printf(" MINUS ");
 						tokenList_add_withoutvalue(MINUS);
@@ -1185,7 +1184,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 176 "lexer.flex"
+#line 175 "lexer.flex"
 {
 						printf(" MUL ");
 						tokenList_add_withoutvalue(MUL);
@@ -1193,7 +1192,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 180 "lexer.flex"
+#line 179 "lexer.flex"
 {
 						printf(" DIV ");
 						tokenList_add_withoutvalue(DIV);
@@ -1201,7 +1200,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 185 "lexer.flex"
+#line 184 "lexer.flex"
 {
 						printf(" DOT ");
 						tokenList_add_withoutvalue(DOT);
@@ -1209,7 +1208,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 189 "lexer.flex"
+#line 188 "lexer.flex"
 {
 						printf(" COMMA ");
 						tokenList_add_withoutvalue(COMMA);
@@ -1217,26 +1216,31 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 193 "lexer.flex"
-printf("\t");
+#line 192 "lexer.flex"
+printf("");
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 194 "lexer.flex"
-printf(" ");
+#line 193 "lexer.flex"
+printf("");
 	YY_BREAK
 case 32:
 /* rule 32 can match eol */
 YY_RULE_SETUP
-#line 195 "lexer.flex"
-printf("\n");
+#line 194 "lexer.flex"
+printf("");
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 198 "lexer.flex"
+#line 195 "lexer.flex"
+printf("ERROR %s ERROR", yytext);
+	YY_BREAK
+case 34:
+YY_RULE_SETUP
+#line 197 "lexer.flex"
 ECHO;
 	YY_BREAK
-#line 1240 "lex.yy.c"
+#line 1244 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2241,7 +2245,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 198 "lexer.flex"
+#line 197 "lexer.flex"
 
 
 

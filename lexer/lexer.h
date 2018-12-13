@@ -60,21 +60,17 @@ typedef struct TokenInfo {
 } TokenInfo;
 
 /**
- * Токен
+ * Токен (Элемент списка)
  */
 typedef struct Token {
     TokenType type;
     TokenInfo info;
+    struct Token* next;
 } Token;
 
 
-typedef struct TokensList {
-    Token* head;
-    int size;
-    int maxsize;
-} TokensList;
 
-TokensList tokensList_create();
+Token* tokensList_create();
 Token* tokensList_push(Token token);
 
 Token* tokenList_add_id(char* value);

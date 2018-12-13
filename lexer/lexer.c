@@ -7,38 +7,32 @@
 #include "lexer.h"
 
 const int init_size = 40;
-TokensList tokensList;
+Token *tokensList;
 
 /**
  * Создание списка токенов
  * @return Указатель на голову списка
  */
-TokensList tokensList_create() {
-    TokensList tokensList;
-    tokensList.head = (Token*) malloc(init_size * sizeof(Token));
-    tokensList.size = 0;
-    tokensList.maxsize = init_size;
-    tokensList = tokensList;
+Token* tokensList_create() {
+    tokensList = (Token*) malloc(init_size * sizeof(Token));
+    tokensList->next = NULL;
     return tokensList;
 }
 
-/**
- * Расширение списка
- * @param list Объект списка
- */
-void tokenList_extend() {
-    int newsize = tokensList.maxsize * 2;
-    tokensList.maxsize = newsize;
-    tokensList.head = realloc(tokensList.head, newsize * sizeof(Token));
-}
-
 Token* tokensList_push(Token token) {
-    if(tokensList.size >= tokensList.maxsize - 5) tokenList_extend(tokensList);
+    Token *tmp = tokensList;
+    while (tmp->next)
+        tmp = tmp->next;
 
-    tokensList.head[tokensList.size] = token;
-    Token* result = &tokensList.head[tokensList.size];
-    tokensList.size++;
-    return result;
+    Token *newitem = (Token*) malloc(sizeof(Token));
+    newitem->next = NULL;
+    newitem->info = token.info;
+    newitem->type = token.type;
+
+    tmp->next = newitem;
+
+
+    return newitem;
 }
 
 /**

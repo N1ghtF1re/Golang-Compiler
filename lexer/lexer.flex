@@ -3,7 +3,6 @@
 %{
 #include "lexer.h"
 
-TokensList tokensList;
 %}
 /*
 DIGITS
@@ -190,10 +189,10 @@ else					{
 						printf(" COMMA ");
 						tokenList_add_withoutvalue(COMMA);
 					}
-[\t]					printf("\t");
-[ ]					printf(" ");
-[\n]					printf("\n");
-
+[\t]					printf("");
+[ ]					printf("");
+[\n]					printf("");
+.					printf("ERROR %s ERROR", yytext);
 
 %%
 
