@@ -1,21 +1,22 @@
 #include <stdio.h>
 
 #include "lexer/lex.yy.c"
+#define inpitfile "main.go"
 
 
 void start_lexer() {
-    FILE *in = fopen("main.go", "r");
-    FILE *out = fopen("test.go", "w");
+    FILE *in = fopen(inpitfile, "r");
 
     yyset_in(in);
-    yyset_out(out);
 
-    tokensList = tokensList_create();
+    TokenNode* tokensList = tokensList_create();
 
     yylex();
 
-    for(int i = 0; i < tokensList.size; i++) {
-        Token el = tokensList.head[i];
+    TokenNode *tokens = tokensList->next;
+
+    while(tokens) {
+        Token el = tokens->token;
         switch (el.type) {
             case ID:
                 printf("ID. NAME: %s\n", el.info.varname);
@@ -57,9 +58,9 @@ void start_lexer() {
             case COMMA:break;
             case PACKAGE:break;
         }
+        tokens = tokens->next;
     }
     fclose(in);
-    fclose(out);
 }
 
 int main() {

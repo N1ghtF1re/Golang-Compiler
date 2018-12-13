@@ -7,27 +7,26 @@
 #include "lexer.h"
 
 const int init_size = 40;
-Token *tokensList;
+TokenNode *tokensList;
 
 /**
  * Создание списка токенов
  * @return Указатель на голову списка
  */
-Token* tokensList_create() {
-    tokensList = (Token*) malloc(init_size * sizeof(Token));
+TokenNode* tokensList_create() {
+    tokensList = (TokenNode*) malloc(init_size * sizeof(Token));
     tokensList->next = NULL;
     return tokensList;
 }
 
-Token* tokensList_push(Token token) {
-    Token *tmp = tokensList;
+TokenNode* tokensList_push(Token token) {
+    TokenNode *tmp = tokensList;
     while (tmp->next)
         tmp = tmp->next;
 
-    Token *newitem = (Token*) malloc(sizeof(Token));
+    TokenNode *newitem = (TokenNode*) malloc(sizeof(Token));
     newitem->next = NULL;
-    newitem->info = token.info;
-    newitem->type = token.type;
+    newitem->token = token;
 
     tmp->next = newitem;
 
@@ -40,7 +39,7 @@ Token* tokensList_push(Token token) {
  * @param value Найденная строка
  * @return Адрес созданного элемента
  */
-Token* tokenList_add_id(char* value) {
+TokenNode* tokenList_add_id(char* value) {
     Token token;
     token.type = ID;
 
@@ -59,7 +58,7 @@ Token* tokenList_add_id(char* value) {
  * @param value Найденная строка
  * @return Адрес созданного элемента
  */
-Token* tokenList_add_string_lit(char* value) {
+TokenNode* tokenList_add_string_lit(char* value) {
     Token token;
     token.type = STRING_LIT;
 
@@ -79,7 +78,7 @@ Token* tokenList_add_string_lit(char* value) {
  * @param value Найденная строка
  * @return Адрес созданного элемента
  */
-Token* tokenList_add_char_lit(char* value) {
+TokenNode* tokenList_add_char_lit(char* value) {
     Token token;
     token.type = CHAR_LIT;
 
@@ -97,7 +96,7 @@ Token* tokenList_add_char_lit(char* value) {
  * @param value Найденная строка
  * @return Адрес созданного элемента
  */
-Token* tokenList_add_float_lit(char* value) {
+TokenNode* tokenList_add_float_lit(char* value) {
     Token token;
     token.type = FLOAT_LIT;
 
@@ -114,7 +113,7 @@ Token* tokenList_add_float_lit(char* value) {
  * @param value Найденная строка
  * @return Адрес созданного элемента
  */
-Token* tokenList_add_int_lit(char* value) {
+TokenNode* tokenList_add_int_lit(char* value) {
     Token token;
     token.type = INT_LIT;
 
@@ -129,7 +128,7 @@ Token* tokenList_add_int_lit(char* value) {
  * @param value Найденная строка
  * @return АДрес созданного элемента
  */
-Token* tokenList_add_prim_type(char* value) {
+TokenNode* tokenList_add_prim_type(char* value) {
     Token token;
     token.type = PRIM_TYPE;
 
@@ -144,7 +143,7 @@ Token* tokenList_add_prim_type(char* value) {
     return tokensList_push(token);
 }
 
-Token* tokenList_add_withoutvalue(TokenType tokenType) {
+TokenNode* tokenList_add_withoutvalue(TokenType tokenType) {
     Token token;
     token.type = tokenType;
 

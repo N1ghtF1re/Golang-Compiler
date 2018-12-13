@@ -5,86 +5,32 @@
 #ifndef GOCOMPILER_LEXER_H
 #define GOCOMPILER_LEXER_H
 
-#include "../go_types.h"
-
-typedef enum TokenType {
-    ID,
-    STRING_LIT,
-    CHAR_LIT,
-    FLOAT_LIT,
-    INT_LIT,
-    PRIM_TYPE,
-    FUNC,
-    VAR,
-    FOR,
-    IF,
-    ELSE,
-    OPEN,
-    CLOSE,
-    BLOPEN,
-    BLCLOSE,
-    NEQUAL,
-    EQUAL,
-    INIT,
-    ASSIGN,
-    NOT,
-    PLUS,
-    MINUS,
-    MUL,
-    DIV,
-    DOT,
-    COMMA,
-    PACKAGE
-} TokenType;
-
-/**
- * Значение токена
- */
-typedef union TokenValue {
-    char *strvalue;
-    int intfalue;
-    double floatvalue;
-} TokenValue;
-
-
-/**
- * Информация о токене
- */
-typedef struct TokenInfo {
-    int isConst; // 1, если переменная - константа, иначе - 0
-
-    char *varname; // Название переменной (Пусто, если литерал)
-    VarType vartype; // Тип
-
-    TokenValue value;
-} TokenInfo;
-
-/**
- * Токен (Элемент списка)
- */
-typedef struct Token {
-    TokenType type;
-    TokenInfo info;
-    struct Token* next;
-} Token;
+#include "../model/tokens.h"
 
 
 
-Token* tokensList_create();
-Token* tokensList_push(Token token);
-
-Token* tokenList_add_id(char* value);
-Token* tokenList_add_string_lit(char* value);
-Token* tokenList_add_char_lit(char* value);
-Token* tokenList_add_float_lit(char* value);
-Token* tokenList_add_int_lit(char* value);
-Token* tokenList_add_prim_type(char* value);
-
-Token* tokenList_add_withoutvalue(TokenType tokenType);
-
+typedef struct TokenNode {
+    Token token;
+    struct TokenNode* next;
+} TokenNode;
 
 
 // МЕТОДЫ:
+
+TokenNode* tokensList_create();
+TokenNode* tokensList_push(Token token);
+
+TokenNode* tokenList_add_id(char* value);
+TokenNode* tokenList_add_string_lit(char* value);
+TokenNode* tokenList_add_char_lit(char* value);
+TokenNode* tokenList_add_float_lit(char* value);
+TokenNode* tokenList_add_int_lit(char* value);
+TokenNode* tokenList_add_prim_type(char* value);
+
+TokenNode* tokenList_add_withoutvalue(TokenType tokenType);
+
+
+
 
 
 
