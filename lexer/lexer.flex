@@ -1,35 +1,9 @@
 %option noyywrap
 
 %{
-enum Token {
-	ID,
-	STRING_LIT,
-	CHAR_LIT,
-	FLOAT_LIT,
-	INT_LIT,
-	PRIM_TYPE,
-	FUNC,
-	VAR,
-	FOR,
-	IF,
-	ELSE,
-	OPEN,
-	CLOSE,
-	BLOPEN,
-	BLCLOSE,
-	NEQUAL,
-	EQUAL,
-	INIT,
-	ASIGN,
-	NOT,
-	PLUS,
-	MINUS,
-	MUL,
-	DIV,
-	DOT,
-	COMMA
-};
+#include "lexer.h"
 
+TokensList tokensList;
 %}
 /*
 DIGITS
@@ -97,49 +71,132 @@ pimitive_type		{numeric_type}|{boolean_type}|{string_type}
 /*TypeLit		{ArrayType}|{StructType}|{PointerType}|{FunctionType}|{InterfaceType}|{SliceType}|{MapType}|{ChannelType}*/
 
 
-%% 
-package(.)*				
+%% 		
 import([ ])*\([^\)]*\)				
 import(.)				
 
+(package)				{	
+						printf(" PACKAGE ");
+						tokenList_add_withoutvalue(PACKAGE);
+					}
 
-{string_lit}				printf("STRING ");
-{rune_lit}				printf("CHAR ");
-{pimitive_type}				printf("PRIMTYPE ");
+{string_lit}				{	
+						printf("(%s STRING)", yytext);
+						tokenList_add_string_lit(yytext);
+					}
+{rune_lit}				{	
+						printf("(%s CHAR)", yytext);
+						tokenList_add_char_lit(yytext);
+					}
+{pimitive_type}				{	
+						printf("(%s PRIMTYPE)", yytext);
+						tokenList_add_prim_type(yytext);
+					}
 
-func					printf("FUNC ");
-var					printf("VAR ");
-for					printf("FOR ");
-if					printf("IF ");
-else					printf("ELSE ");
+func					{
+						printf(" FUNC ");
+						tokenList_add_withoutvalue(FUNC);
+					}
+var					{
+						printf(" VAR ");
+						tokenList_add_withoutvalue(VAR);
+					}
+for					{
+						printf(" FOR ");
+						tokenList_add_withoutvalue(FOR);
+					}
+if					{
+						printf(" IF ");
+						tokenList_add_withoutvalue(IF);
+					}
+else					{
+						printf(" ELSE ");
+						tokenList_add_withoutvalue(ELSE);
+					}
 
-\(					printf("OPEN ");
-\)					printf("CLOSE ");
+\(					{
+						printf(" OPEN ");
+						tokenList_add_withoutvalue(OPEN);
+					}
+\)					{
+						printf(" CLOSE ");
+						tokenList_add_withoutvalue(CLOSE);
+					}
 
-\}					printf("BLOPEN ");
-\{					printf("BLCLOSE ");
+\}					{
+						printf(" BLOPEN ");
+						tokenList_add_withoutvalue(BLOPEN);
+					}
+\{					{
+						printf(" BLCLOSE ");
+						tokenList_add_withoutvalue(BLCLOSE);
+					}
 
-{float_lit}				printf("FLOAT ");
-{int_lit}				printf("INT ");
-{identifier}				printf("ID ");
+{float_lit}				{	
+						printf("(%s FLOAT)", yytext);
+						tokenList_add_float_lit(yytext);
+					}
+{int_lit}				{	
+						printf("(%s INT)", yytext);
+						tokenList_add_int_lit(yytext);
+					}
+{identifier}				{
+						printf("(%s ID)", yytext);
+						tokenList_add_id(yytext);
+					}
 
-!=					printf("NEQUAL");
-==					printf("EQUAL ");
-:=					printf("INIT ");
-=					printf("ASSIGN ");
-!					printf("NOT ");
-\+					printf("PLUS ");
--					printf("MINUS ");
-\*					printf("MUL ");
-\/					printf("DIV ");
+!=					{
+						printf(" NEQUAL ");
+						tokenList_add_withoutvalue(NEQUAL);
+					}
+==					{
+						printf(" EQUAL ");
+						tokenList_add_withoutvalue(EQUAL);
+					}
+:=					{
+						printf(" INIT ");
+						tokenList_add_withoutvalue(INIT);
+					}
+=					{
+						printf(" ASSIGN ");
+						tokenList_add_withoutvalue(ASSIGN);
+					}
+!					{
+						printf(" NOT ");
+						tokenList_add_withoutvalue(NOT);
+					}
+\+					{
+						printf(" PLUS ");
+						tokenList_add_withoutvalue(PLUS);
+					}
+-					{
+						printf(" MINUS ");
+						tokenList_add_withoutvalue(MINUS);
+					}
+\*					{
+						printf(" MUL ");
+						tokenList_add_withoutvalue(MUL);
+					}
+\/					{
+						printf(" DIV ");
+						tokenList_add_withoutvalue(DIV);
+					}
 
-\.					printf("DOT ");
-,					printf("COMMA ");
+\.					{
+						printf(" DOT ");
+						tokenList_add_withoutvalue(DOT);
+					}
+,					{
+						printf(" COMMA ");
+						tokenList_add_withoutvalue(COMMA);
+					}
+[\t]					printf("\t");
+[ ]					printf(" ");
+[\n]					printf("\n");
 
 
 %%
 
-int main() {
-	yylex();
-	
-}
+
+
+
