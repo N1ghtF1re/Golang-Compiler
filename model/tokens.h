@@ -34,7 +34,13 @@ typedef enum TokenType {
     DIV,
     DOT,
     COMMA,
-    PACKAGE
+    PACKAGE,
+    ENDLINE,
+    CARET,
+    PLUSPLUS,
+    MINUSMINUS,
+    SQOPEN,
+    SQCLOSE
 } TokenType;
 
 

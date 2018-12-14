@@ -14,7 +14,7 @@ TokenNode *tokensList;
  * @return Указатель на голову списка
  */
 TokenNode* tokensList_create() {
-    tokensList = (TokenNode*) malloc(init_size * sizeof(Token));
+    tokensList = (TokenNode*) malloc(init_size * sizeof(TokenNode));
     tokensList->next = NULL;
     return tokensList;
 }
@@ -24,14 +24,16 @@ TokenNode* tokensList_push(Token token) {
     while (tmp->next)
         tmp = tmp->next;
 
-    TokenNode *newitem = (TokenNode*) malloc(sizeof(Token));
+
+    TokenNode *newitem = (TokenNode*) malloc(sizeof(TokenNode));
     newitem->next = NULL;
     newitem->token = token;
 
     tmp->next = newitem;
 
 
-    return newitem;
+
+    return NULL;
 }
 
 /**

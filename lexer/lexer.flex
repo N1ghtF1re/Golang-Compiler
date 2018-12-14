@@ -122,11 +122,11 @@ else					{
 						tokenList_add_withoutvalue(CLOSE);
 					}
 
-\}					{
+\{					{
 						printf(" BLOPEN ");
 						tokenList_add_withoutvalue(BLOPEN);
 					}
-\{					{
+\}					{
 						printf(" BLCLOSE ");
 						tokenList_add_withoutvalue(BLCLOSE);
 					}
@@ -142,6 +142,22 @@ else					{
 {identifier}				{
 						printf("(%s ID)", yytext);
 						tokenList_add_id(yytext);
+					}
+\+\+					{
+						printf(" PLUSPLUS ");
+						tokenList_add_withoutvalue(PLUSPLUS);
+					}
+--					{
+						printf(" MINUSMINUS ");
+						tokenList_add_withoutvalue(MINUSMINUS);
+					}
+\[					{
+						printf(" SQOPEN ");
+						tokenList_add_withoutvalue(SQOPEN);
+					}
+\]					{
+						printf(" SQCLOSE ");
+						tokenList_add_withoutvalue(SQCLOSE);
 					}
 
 !=					{
@@ -172,6 +188,10 @@ else					{
 						printf(" MINUS ");
 						tokenList_add_withoutvalue(MINUS);
 					}
+\^					{
+						printf(" CARET ");
+						tokenList_add_withoutvalue(CARET);
+					}
 \*					{
 						printf(" MUL ");
 						tokenList_add_withoutvalue(MUL);
@@ -191,8 +211,11 @@ else					{
 					}
 [\t]					printf("");
 [ ]					printf("");
-[\n]					printf("");
-.					printf("ERROR %s ERROR", yytext);
+[\n]					{
+						printf(" ENDILNE ");
+						//tokenList_add_withoutvalue(ENDLINE);
+					}
+(.)					printf("ERROR %s ERROR", yytext);
 
 %%
 

@@ -1,7 +1,9 @@
 #include <stdio.h>
 
 #include "lexer/lex.yy.c"
-#define inpitfile "main.go"
+#include "parser/parser.h"
+
+#define inpitfile "main2.go"
 
 
 void start_lexer() {
@@ -13,8 +15,11 @@ void start_lexer() {
 
     yylex();
 
-    TokenNode *tokens = tokensList->next;
+    parser_start(tokensList);
 
+    /*
+    TokenNode *tokens = tokensList->next;
+    printf("\n");
     while(tokens) {
         Token el = tokens->token;
         switch (el.type) {
@@ -60,6 +65,7 @@ void start_lexer() {
         }
         tokens = tokens->next;
     }
+     */
     fclose(in);
 }
 
