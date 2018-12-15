@@ -8,6 +8,7 @@
 #include "../model/go_types.h"
 
 typedef enum TokenType {
+    TOKENNONE,
     ID,
     STRING_LIT,
     CHAR_LIT,

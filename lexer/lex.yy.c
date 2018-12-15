@@ -1281,21 +1281,20 @@ case 37:
 YY_RULE_SETUP
 #line 214 "lexer.flex"
 {
-						printf(" ENDILNE ");
 						//tokenList_add_withoutvalue(ENDLINE);
 					}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 218 "lexer.flex"
+#line 217 "lexer.flex"
 printf("ERROR %s ERROR", yytext);
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 220 "lexer.flex"
+#line 219 "lexer.flex"
 ECHO;
 	YY_BREAK
-#line 1299 "lex.yy.c"
+#line 1298 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2300,7 +2299,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 220 "lexer.flex"
+#line 219 "lexer.flex"
 
 
 

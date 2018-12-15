@@ -10,6 +10,7 @@
 #define false 0
 
 #include "../lexer/lexer.h"
+#include "../model/ast.h"
 
 void parser_start(TokenNode *tokens);
 

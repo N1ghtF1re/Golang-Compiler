@@ -212,7 +212,6 @@ else					{
 [\t]					printf("");
 [ ]					printf("");
 [\n]					{
-						printf(" ENDILNE ");
 						//tokenList_add_withoutvalue(ENDLINE);
 					}
 (.)					printf("ERROR %s ERROR", yytext);

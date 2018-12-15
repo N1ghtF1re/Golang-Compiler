@@ -16,10 +16,9 @@ bool term (TokenType token) {
     return (next = next->next)->token.type == token;
 }
 
-bool id_list(); // PREDECLARATION
+bool id_list(IdsList *tmpNode); // PREDECLARATION
 bool func_paramslist();
-bool func_declarations();
-bool top_level_declarations();
+DeclSectionNode *top_level_declarations();
 bool statements_list();
 bool var_specs_list();
 bool expr_list();
@@ -32,9 +31,15 @@ bool func_call();
 /**
  * GRAMMAR:
  * PACKAGE DIFINITION = package identificator
+ *
+ * TODO: передалать узел с типом на нетерминальный
  */
-bool package_difinition() {
-    return term(PACKAGE) && term(ID);
+PackageNode *package_difinition() {
+    if(!term(PACKAGE)) return NULL;
+    if(!term(ID)) return NULL;
+    PackageNode *packageNode = (PackageNode *) malloc(sizeof(PackageNode));
+    packageNode->id = next->token;
+    return packageNode;
 }
 
 
@@ -74,10 +79,10 @@ bool postfix_expr3() {
 }
 
 bool func_call1() {
-    return term(OPEN) && id_list() && term(CLOSE) && func_call();
+    return false; //TODO: term(OPEN) && id_list() && term(CLOSE) && func_call();
 }
 bool func_call12() {
-    return term(OPEN) && id_list() && term(CLOSE);
+    return false; // TODO: term(OPEN) && id_list() && term(CLOSE);
 }
 
 /**
@@ -153,11 +158,11 @@ bool expr_list() {
 }
 
 bool var_spec1() {
-    return id_list() && type() && term(ASSIGN) && expr_list();
+    return false; //TODO: id_list() && type() && term(ASSIGN) && expr_list();
 }
 
 bool var_spec2() {
-    return id_list() && term(ASSIGN) && expr_list();
+    return false; // TODO: id_list() && term(ASSIGN) && expr_list();
 }
 
 bool var_spec() {
@@ -240,22 +245,36 @@ bool block() {
  * GRAMMAR:
  * ID_LIST1 = ID , ID_LIST
  */
-bool id_list1() {
-    return term(ID) && term(COMMA) && id_list();
+bool id_list1(IdsList *tmpNode) {
+    if(!term(ID)) return false;
+
+    tmpNode->next = (IdsList *) malloc(sizeof(IdsList));
+    tmpNode = tmpNode->next;
+    tmpNode->next = NULL;
+    tmpNode->token_info = next->token;
+
+    if(!term(COMMA)) return false;
+
+    return id_list(tmpNode);
 }
 
 /**
  * GRAMMAR:
  * ID_LIST1 = ID
  */
-bool id_list2() {
-    return term(ID);
+bool id_list2(IdsList *tmpNode) {
+    if(!term(ID)) return false;
+    tmpNode->next = (IdsList *) malloc(sizeof(IdsList));
+    tmpNode = tmpNode->next;
+    tmpNode->next = NULL;
+    tmpNode->token_info = next->token;
+    return true;
 }
 
-bool id_list() {
+bool id_list(IdsList *tmpNode) {
     TokenNode *save = next;
-    return (next = save, id_list1())
-           || (next = save, id_list2());
+    return (next = save, tmpNode->next = NULL, id_list1(tmpNode))
+           || (next = save, tmpNode->next = NULL, id_list2(tmpNode));
 }
 
 /**
@@ -263,68 +282,164 @@ bool id_list() {
  * GRAMMAR:
  * ID_LIST TYPE
  */
-bool param_decl1() {
-    return id_list() && type();
+ParamsList *param_decl1() {
+    IdsList *idsList = (IdsList *) malloc(sizeof(IdsList));
+    idsList->next = NULL;
+    Token token;
+    token.type = TOKENNONE;
+    idsList->token_info = token;
+
+    if(!id_list(idsList)) return NULL;
+    if(!type()) return NULL;
+
+    ParamsList *paramsList = (ParamsList *) malloc(sizeof(ParamsList));
+    ParamsList *tmpParam = paramsList;
+
+    for(IdsList *tmpIdL = idsList->next; tmpIdL != NULL; tmpIdL = tmpIdL->next) {
+        tmpParam->next = (ParamsList *) malloc(sizeof(ParamsList));
+        tmpParam = tmpParam->next;
+        tmpParam->next = NULL;
+
+        tmpParam->var = tmpIdL->token_info;
+        tmpParam->vartype = next->token;
+     }
+
+    return paramsList->next;
 }
 
 /**
  * GRAMMAR:
  * TYPE
  */
-bool param_decl2() {
-    return type();
+ParamsList *param_decl2() {
+    ParamsList *paramsList = (ParamsList *) malloc(sizeof(ParamsList));
+
+    if(!type()) return NULL;
+
+    paramsList->vartype = next->token;
+    Token token;
+    token.type = TOKENNONE;
+    paramsList->var = token;
+
+    return paramsList;
 }
 
-bool param_decl() {
+ParamsList *param_decl() {
     TokenNode *save = next;
-    return (next = save, param_decl1())
-           || (next = save, param_decl2());
+
+    ParamsList *paramsList = NULL;
+
+    if(!paramsList) paramsList =  (next = save, param_decl1());
+    if(!paramsList) paramsList = (next = save, param_decl2());
+
+    return paramsList;
 }
 
 /**
  * GRAMMAR:
  * FUNC_PARAMSLIST1 = PARAM_DECL , FUNC_PARAMS
  */
-bool func_paramslist1() {
-    return param_decl() && term(COMMA) && func_paramslist();
+bool func_paramslist1(ParamsList *tmpNode) {
+    tmpNode->next = param_decl();
+
+    if(!tmpNode->next) return false;
+
+    while (tmpNode->next) tmpNode = tmpNode->next;
+    tmpNode->next = NULL;
+
+    if(!term(COMMA)) return false;
+
+
+    return func_paramslist(tmpNode);
 }
 
 /**
  * GRAMMAR:
  * FUNC_PARAMSLIST1 = PARAM_DECL
  */
-bool func_paramslist2() {
-    return param_decl();
+bool func_paramslist2(ParamsList *tmpNode) {
+    tmpNode->next = param_decl();
+
+    if(!tmpNode->next) return false;
+
+
+    return true;
 }
 
-bool func_paramslist() {
+bool func_paramslist(ParamsList *tmpNode) {
     TokenNode *save = next;
-    return (next = save, func_paramslist1())
-           || (next = save, func_paramslist2())
-           || (next = save, true); // Params - optional
+
+    bool curr_production_result = false;
+
+    if(!curr_production_result) curr_production_result = (next = save, tmpNode->next = NULL, func_paramslist1(tmpNode));
+    if(!curr_production_result) curr_production_result = (next = save, tmpNode->next = NULL, func_paramslist2(tmpNode));
+    if(!curr_production_result) curr_production_result = (next = save, tmpNode->next = NULL, true);
+    return curr_production_result;
 }
 
 /**
  * GRAMMAR:
  * ( FUNC_PARAMSLIST )
  */
-bool func_params() {
-    return term(OPEN) && func_paramslist() && term(CLOSE);
+ParamsList *func_params() {
+    ParamsList *paramsList = (ParamsList *) malloc(sizeof(ParamsList));
+    paramsList->next = NULL;
+
+    if(!term(OPEN)) return NULL;
+
+    func_paramslist(paramsList);
+    // if(paramsList->next == NULL) paramsList = NULL; // EMPTY ParamList
+
+    if(!term(CLOSE)) return NULL;
+
+    return paramsList;
 }
 
 
-bool func_result1() {
-    return func_params();
+ResultsList *func_result1() {
+    ResultsList *resultsList = (ResultsList *) malloc(sizeof(ResultsList));
+    resultsList->next = NULL;
+
+    ParamsList *paramsList = func_params();
+
+    if(!paramsList) return NULL;
+
+    ResultsList *tmpResult = resultsList;
+
+    /*
+     * Transfer the information from the parameter list with the list of result types
+     */
+    for(ParamsList *tmp = paramsList->next; tmp != NULL; tmp = tmp->next) {
+        tmpResult->next = (ResultsList *) malloc(sizeof(ResultsList));
+        tmpResult = tmpResult->next;
+        tmpResult->next = NULL;
+        tmpResult->token_info = tmp->vartype;
+    }
+
+    return resultsList;
 }
-bool func_result2() {
-    return type();
+ResultsList *func_result2() {
+    ResultsList *resultsList = (ResultsList *) malloc(sizeof(ResultsList));
+    resultsList->next = (ResultsList *) malloc(sizeof(ResultsList));
+    resultsList->next->next = NULL;
+
+    if(type()) {
+        resultsList->next->token_info = next->token;
+        return resultsList;
+    }
+
+    return NULL;
 }
 
-bool func_result() {
+ResultsList *func_result() {
     TokenNode *save = next;
-    return (next = save, func_result1())
-           || (next = save, func_result2())
-           || (next = save, true); // RESULT - optional
+
+    ResultsList *resultsList = NULL;
+
+    if(!resultsList) resultsList = (next = save, func_result1());
+    if(!resultsList) resultsList = (next = save, func_result2());
+
+    return resultsList;
 }
 
 /**
@@ -332,8 +447,12 @@ bool func_result() {
  * FUNC_PARAMS FUNC_RESULT
  * @return
  */
-bool func_signature1() {
-    return func_params() && func_result();
+FuncSignatureSideNode *func_signature1() {
+    FuncSignatureSideNode *sideNode = ast_create_signature_side_node();
+    sideNode->params = func_params();
+    sideNode->results = func_result();
+
+    return (sideNode->params && sideNode->results) ? sideNode : NULL;
 }
 
 /**
@@ -341,14 +460,24 @@ bool func_signature1() {
  * FUNC_PARAMS
  * @return
  */
-bool func_signature2() {
-    return func_params();
+FuncSignatureSideNode *func_signature2() {
+    FuncSignatureSideNode *sideNode = ast_create_signature_side_node();
+
+    sideNode->results = NULL; // In this production mussing result type delcaration
+
+    sideNode->params = func_params();
 }
 
-bool func_signature() {
+FuncSignatureSideNode *func_signature() {
     TokenNode *save = next;
-    return (next = save, func_signature1())
-           || (next = save, func_signature2());
+    FuncSignatureSideNode *sideNode = NULL;
+
+    if(!sideNode) sideNode = (next = save, func_signature1());
+    if(!sideNode) sideNode = (next = save, func_signature2());
+
+    if(sideNode->params->next == NULL) sideNode->params = NULL; // EMPTY PARAMS LIST
+
+    return sideNode;
 }
 
 
@@ -365,42 +494,42 @@ bool func_body() {
  * GRAMMAR:
  * FUNC_DELARATION1 = func id FUNC_SIGNATURE FUNC_BODY
  */
-bool func_declaration1() {
-    return false;// return term(FUNC) && term(ID) && func_signature() && func_body();
+FuncDeclNode *func_declaration1() {
+    return NULL;// return term(FUNC) && term(ID) && func_signature() && func_body();
 }
 
 /**
  * GRAMMAR:
  * FUNC_DELARATION2 = func id FUNC_SIGNATURE
  */
-bool func_declaration2() {
-    if(term(FUNC) && term(ID) && func_signature()) {
-        printf("\nKEK!\n");
-        return true;
-    };
-    printf("\nMEM\n");
-    return false;
+FuncDeclNode *func_declaration2() {
+    FuncDeclNode *funcDeclNode = ast_create_func_decl_node();
+    // In this production missing body (body = NULL)
+
+    if(!(term(FUNC) && term(ID))) return NULL;  // START WITH TERMINALS func id
+    funcDeclNode->token_info = next->token;
+
+    FuncSignatureSideNode *signature = func_signature(); // AFTER id - params and results
+    if(!signature) return NULL;
+
+
+    funcDeclNode->params = signature->params;
+    funcDeclNode->results = signature->results;
+
+    return funcDeclNode;
 }
 
-bool func_declaration() {
+FuncDeclNode *func_declaration() {
     TokenNode *save = next;
 
-    return (next = save, func_declaration1())
-           || (next = save, func_declaration2());
+    FuncDeclNode *funcDeclNode = NULL;
+
+    if(!funcDeclNode) funcDeclNode = (next = save, func_declaration1());
+    if(!funcDeclNode) funcDeclNode = (next = save, func_declaration2());
+
+    return funcDeclNode;
 }
 
-
-bool func_declarations1() {
-    return func_declaration() && top_level_declarations();
-}
-
-
-bool func_declarations() {
-    TokenNode *save = next;
-    return (next = save, func_declarations1())
-           || (next = save, true);
-
-}
 
 /**
  * DECLARATION_SECTION = FUNC_DECLARATION
@@ -409,22 +538,96 @@ bool func_declarations() {
  *                     | TYPE_DECLARATION
  *
  */
-bool top_level_declarations() {
+DeclSectionNode *top_level_declarations() {
     TokenNode *save = next;
-    return (next = save, func_declarations())
-           || (next = save, false);
-}
+    bool isDecl = true;
+
+    DeclSectionNode *declSectionNode = ast_create_decl_section_node();
+
+
+    while (isDecl) {
+        NodeType nodeType = NODENONE;
+
+        void *decl = (next = save, func_declaration());
+        if(decl) nodeType = FUNC_DECL;
+
+        //if(!decl) decl = (next = save, ...)
+
+
+        if(decl) {
+           AdvDeclList *tmp = declSectionNode->decl_list;
+           while(tmp->next) tmp = tmp->next;
+           tmp->next = (AdvDeclList *) malloc(sizeof(AdvDeclList));
+           tmp = tmp->next;
+           tmp->declaration = decl;
+           tmp->type = nodeType;
+           tmp->next = NULL;
+
+           save = next; // UPDATE SAVED POINTER
+        } else {
+            isDecl = false; // EXIT FROM CYCLE;
+        }
+    }
+
+    return declSectionNode;
+ }
 
 /**
  * GRAMMAR:
  * GO_PROGRAM = PACKAGE_DIFINITION DECLARATION_SECTION
  */
-bool go_program() {
-    return package_difinition() && top_level_declarations();
+ProgramNode *go_program() {
+    ProgramNode *programNode = ast_create_pogram_node();
+    programNode->package_decl = package_difinition();
+    programNode->decl_section = top_level_declarations();
+
+
+    return programNode->decl_section && programNode->package_decl ? programNode : NULL;
+
 }
 
 void parser_start(TokenNode *tokens) {
     next = tokens;
-    printf("\n%d\n", go_program());
+    ProgramNode *root = go_program();
+    printf("\n");
+    if(root) {
+        if(root->package_decl){
+            printf("PACKAGE %s\n", root->package_decl->id.info.varname);
+        }
+        if(root->decl_section) {
+            printf("DECLARATION SECTION\n");
+            AdvDeclList *advDeclList = root->decl_section->decl_list->next;
+            while(advDeclList) {
+                switch (advDeclList->type) {
+                    case FUNC_DECL:
+                        printf("   FUNC_DECL\n");
+                        FuncDeclNode *funcDeclNode = (FuncDeclNode *) advDeclList->declaration;
+                        printf("       NAME: %s\n", funcDeclNode->token_info.info.varname);
+                        if(funcDeclNode->params) {
+                            ParamsList *paramsList = funcDeclNode->params->next;
+                            printf("       VARS:\n");
+                            while (paramsList) {
+                                printf("          %s | %s\n", paramsList->var.info.varname, paramsList->vartype.info.varname);
+
+                                paramsList = paramsList->next;
+                            }
+                        }
+
+                        if(funcDeclNode->results) {
+                            ResultsList *resultsList = funcDeclNode->results->next;
+                            printf("       RES:\n");
+                            while (resultsList) {
+                                printf("          %s\n", resultsList->token_info.info.varname);
+
+                                resultsList = resultsList->next;
+                            }
+                        }
+                        break;
+                }
+                advDeclList = advDeclList->next;
+            }
+
+        }
+    }
     // TODO: START PARSING
 }
