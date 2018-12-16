@@ -95,7 +95,7 @@ ExpressionNode *ast_create_postfix_expr_node(ExpressionNode *postfix, Expression
     return expressionNode;
 }
 
-ExpressionNode *ast_create_token_node(Token token) {
+ExpressionNode *ast_create_expr_token_node(Token token) {
     OnlyTokenNode *onlyTokenNode = malloc(sizeof(OnlyTokenNode));
     onlyTokenNode->token = token;
 

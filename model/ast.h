@@ -152,7 +152,7 @@ BlockNode *ast_create_block_node();
 VarDeclNode *ast_create_var_decl_node();
 ExpressionNode *ast_create_expr_node(void *expression);
 ExpressionNode *ast_create_postfix_expr_node(ExpressionNode *postfix, ExpressionNode *operand);
-ExpressionNode *ast_create_token_node(Token token);
+ExpressionNode *ast_create_expr_token_node(Token token);
 ExpressionNode *ast_create_unar_expr_node(ExpressionNode *operand, Token operator);
 ExpressionNode *ast_create_binar_expr_node(ExpressionNode *l, ExpressionNode *r, Token operator);
 

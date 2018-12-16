@@ -12,6 +12,10 @@
 #include "../lexer/lexer.h"
 #include "../model/ast.h"
 
-void parser_start(TokenNode *tokens);
+TokenNode* next; // Pointer to the next token
 
+void parser_start(TokenNode *tokens);
+bool term (TokenType token);
+bool type();
+bool literal();
 #endif //GOCOMPILER_PARSER_H
