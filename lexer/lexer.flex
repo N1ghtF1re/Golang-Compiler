@@ -200,6 +200,10 @@ else					{
 						printf(" DIV ");
 						tokenList_add_withoutvalue(DIV);
 					}
+\%					{
+						printf(" MOD ");
+						tokenList_add_withoutvalue(MOD);
+					}
 
 \.					{
 						printf(" DOT ");

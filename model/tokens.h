@@ -27,6 +27,7 @@ typedef enum TokenType {
     NEQUAL,
     EQUAL,
     INIT,
+    MOD,
     ASSIGN,
     NOT,
     PLUS,

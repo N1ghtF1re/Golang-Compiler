@@ -70,6 +70,7 @@ TokenNode* tokenList_add_string_lit(char* value) {
 
     token.info.isConst = 1;
     token.info.vartype = STRING;
+    token.info.varname = NULL;
     token.info.value.strvalue = cpvalue;
     return tokensList_push(token);
 }
@@ -88,6 +89,7 @@ TokenNode* tokenList_add_char_lit(char* value) {
 
     token.info.isConst = 1;
     token.info.vartype = INT;
+    token.info.varname = NULL;
     token.info.value.intfalue = chr;
     return tokensList_push(token);
 }
@@ -104,6 +106,7 @@ TokenNode* tokenList_add_float_lit(char* value) {
 
     token.info.isConst = 1;
     token.info.vartype = FLOAT;
+    token.info.varname = NULL;
     token.info.value.floatvalue = strtod(value, NULL);
     return tokensList_push(token);
 }
@@ -121,6 +124,7 @@ TokenNode* tokenList_add_int_lit(char* value) {
 
     token.info.isConst = 1;
     token.info.vartype = INT;
+    token.info.varname = NULL;
     token.info.value.intfalue = (int) strtol(value, NULL, 10);
     return tokensList_push(token);
 }
